@@ -30,8 +30,7 @@ public class DemoResource {
 	@GET
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON })
-	@Transactional
-    public Response init() {
+	public Response init() {
 		
 		Device d1 = new Device("Asdiuiyasuidyiaysd7", true);
 		Credit c1 = new Credit(BigInteger.valueOf(1000000000000L), new Date(new Date().getTime() + 10000000000L));
@@ -45,7 +44,7 @@ public class DemoResource {
     	resp.put(userService.saveUser(u1), u1);
     	resp.put(userService.saveUser(u2), u2);
     	
-        return Response.ok().build();
+        return Response.ok(resp).build();
     }
 
 }

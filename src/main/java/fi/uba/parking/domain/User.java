@@ -49,6 +49,12 @@ public class User {
 
 	@Column(name="deleteDate")
 	private Date deleteDate;
+	
+	@Column(name="deleteDate")
+	private Double latitude;
+	
+	@Column(name="deleteDate")
+	private Double longitude;
 
 	public User() {
 	}
@@ -136,6 +142,26 @@ public class User {
 
 	public void setDeleteDate(Date deleteDate) {
 		this.deleteDate = deleteDate;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public void setDevice(Device device) {
+		this.device = device;
 	}
 
 	@Override
