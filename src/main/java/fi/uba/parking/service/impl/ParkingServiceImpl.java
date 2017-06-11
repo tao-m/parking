@@ -56,7 +56,10 @@ public class ParkingServiceImpl implements IParkingService {
 		User user = this.userService.getUserById(userId);
 		if (user == null)
 			throw new IllegalArgumentException("Invalid User");
-
+		
+		if(this.checkForActivePaking(user))
+			throw new IllegalArgumentException("User has a parking already running");
+		
 		GeoClientResult<Address> result = geoClient.reverseGeocode(coordinate);
 		if (result.getStatus() != RequestResult.OK)
 			throw new IllegalArgumentException("Invalid Coordinate");
@@ -114,6 +117,18 @@ public class ParkingServiceImpl implements IParkingService {
 
 		return new StreetSegment(address.getRoute(), address.getRoute(), from, to, StreetSegment.DEFAULT_CAPACITY,
 				StreetSegment.DEFAULT_CAPACITY);
+	}
+
+	@Override
+	@Transactional
+	public ParkingRecord findActiveRecordByUser(User user) {
+		return this.parkingDao.findActiveRecordByUser(user);
+	}
+	
+	@Override
+	@Transactional
+	public boolean checkForActivePaking(User user) {
+		return this.findActiveRecordByUser(user) != null;
 	}
 
 }

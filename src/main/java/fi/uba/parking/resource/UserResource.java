@@ -46,10 +46,10 @@ public class UserResource {
 			userService.updateUserPosition(id, new Coordinate(req.getLat(), req.getLng()));
 			return Response.ok().build();
 		} catch (IllegalArgumentException e) {
-			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+			return this.buildErrorResponse(Status.BAD_REQUEST, e.getMessage());
 		} catch (Exception e) {
-			LOGGER.error("Unexécted Error: ", e);
-			return Response.serverError().build();
+			LOGGER.error("Unexpected Error: ", e);
+			return this.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
 
@@ -62,10 +62,10 @@ public class UserResource {
 					.ok(parkingService.startParking(id, new Coordinate(req.getLat(), req.getLng()), req.getDomain()))
 					.build();
 		} catch (IllegalArgumentException e) {
-			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+			return this.buildErrorResponse(Status.BAD_REQUEST, e.getMessage());
 		} catch (Exception e) {
-			LOGGER.error("Unexécted Error: ", e);
-			return Response.serverError().build();
+			LOGGER.error("Unexpected Error: ", e);
+			return this.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 
 	}
@@ -79,10 +79,10 @@ public class UserResource {
 			resp.put("totalCost", parkingService.stopParking(userId, parkingId).toString());
 			return Response.ok(resp).build();
 		} catch (IllegalArgumentException e) {
-			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+			return this.buildErrorResponse(Status.BAD_REQUEST, e.getMessage());
 		} catch (Exception e) {
-			LOGGER.error("Unexécted Error: ", e);
-			return Response.serverError().build();
+			LOGGER.error("Unexpected Error: ", e);
+			return this.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
 
@@ -116,10 +116,16 @@ public class UserResource {
 			userService.updateUserDevice(id, req.getDevice());
 			return Response.ok().build();
 		} catch (IllegalArgumentException e) {
-			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+			return this.buildErrorResponse(Status.BAD_REQUEST, e.getMessage());
 		} catch (Exception e) {
-			LOGGER.error("Unexécted Error: ", e);
-			return Response.serverError().build();
+			LOGGER.error("Unexpected Error: ", e);
+			return this.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
+	}
+	
+	private Response buildErrorResponse(Status status, String message) {
+		Map<String, String> resp = new HashMap<>();
+		resp.put("message", message);
+		return Response.status(status).entity(resp).build();
 	}
 }

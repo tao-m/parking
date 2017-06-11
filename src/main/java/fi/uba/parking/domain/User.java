@@ -190,6 +190,13 @@ public class User {
 	public void addCredit(BigInteger credit) {
 		this.availableCredit.add(credit);
 	}
+	
+	public Coordinate currentPosition() {
+		if(this.latitude == null || this.longitude == null) {
+			return null;
+		}
+		return new Coordinate(this.latitude, this.longitude);
+	}
 
 	@Override
 	public int hashCode() {

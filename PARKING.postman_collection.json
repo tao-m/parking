@@ -1,0 +1,108 @@
+{
+	"variables": [],
+	"info": {
+		"name": "PARKING",
+		"_postman_id": "44fa892e-da55-56cd-f4aa-44cbf2b0e322",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "UPDATE CURRENT POSITION",
+			"request": {
+				"url": "http://localhost:8080/parking/user/1/position",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"lat\":-34.5415402,\n\t\"lng\":-58.707371\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "START PARKING",
+			"request": {
+				"url": "http://localhost:8080/parking/user/1/parking",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"lat\":-34.5415402,\n\t\"lng\":-58.707371,\n\t\"domain\": \"nnn123\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "STOP PARKING",
+			"request": {
+				"url": "http://localhost:8080/parking/user/1/parking/1",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "INIT",
+			"request": {
+				"url": "http://localhost:8080/parking/init",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE DEVICE KEY",
+			"request": {
+				"url": "http://localhost:8080/parking/user/1/device",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"device\":\"AKAKAKAKAKKAKAKAKAKAKKAKAKAKAKAKA\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

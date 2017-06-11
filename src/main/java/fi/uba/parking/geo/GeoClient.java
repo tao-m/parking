@@ -73,7 +73,7 @@ public class GeoClient {
 
 			DistanceMatrixElement result = distanceMatrix.rows[0].elements[0];
 			if (result.status == DistanceMatrixElementStatus.OK) {
-				return new GeoClientResult<Long>(RequestResult.INVALID, result.distance.inMeters);
+				return new GeoClientResult<Long>(RequestResult.OK, result.distance.inMeters);
 			} else {
 				return new GeoClientResult<Long>(RequestResult.INVALID, null);
 			}
