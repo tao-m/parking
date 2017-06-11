@@ -50,10 +50,10 @@ public class User {
 	@Column(name="deleteDate")
 	private Date deleteDate;
 	
-	@Column(name="deleteDate")
+	@Column(name="latitude")
 	private Double latitude;
 	
-	@Column(name="deleteDate")
+	@Column(name="longitude")
 	private Double longitude;
 
 	public User() {
