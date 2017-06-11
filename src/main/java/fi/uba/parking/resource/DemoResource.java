@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -13,11 +14,12 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import fi.uba.parking.domain.Credit;
 import fi.uba.parking.domain.Device;
 import fi.uba.parking.domain.User;
+import fi.uba.parking.notification.Notification;
+import fi.uba.parking.notification.Notifier;
 import fi.uba.parking.service.IUserService;
 
 @Component
@@ -26,6 +28,9 @@ public class DemoResource {
 	
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private Notifier notifier;
 	
 	@GET
     @Path("/")
@@ -45,6 +50,16 @@ public class DemoResource {
     	resp.put(userService.saveUser(u2), u2);
     	
         return Response.ok(resp).build();
+    }
+	
+	@POST
+    @Path("/notification")
+    @Produces({ MediaType.APPLICATION_JSON })
+	public Response notification(Map<String, String> map) {
+		
+		this.notifier.sendNotification(new Notification("HOLA!", map.get("user")));
+    	
+        return Response.ok().build();
     }
 
 }
