@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fi.uba.parking.domain.User;
+import fi.uba.parking.geo.Coordinate;
 import fi.uba.parking.persistence.IUserDao;
 import fi.uba.parking.service.IUserService;
 
@@ -26,5 +27,17 @@ public class UserServiceImpl implements IUserService {
 	@Transactional
 	public User getUserById(Long id) {
 		return this.userDao.getById(id);
+	}
+	
+	@Override
+	@Transactional
+	public void updateUserPosition(Long id, Coordinate coordinate) {
+		User user = this.userDao.getById(id);
+		if(user == null)
+			throw new IllegalArgumentException("Invalid User");
+		
+		user.setLastUpdate(new Date());
+		user.updatePosition(coordinate);
+		this.userDao.save(user);
 	}
 }

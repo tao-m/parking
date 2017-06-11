@@ -19,6 +19,7 @@ import fi.uba.parking.request.StartParkingRequest;
 import fi.uba.parking.request.UpdateDeviceRequest;
 import fi.uba.parking.request.UpdatePositionRequest;
 import fi.uba.parking.service.IParkingService;
+import fi.uba.parking.service.IUserService;
 
 @Component
 @Path("/user")
@@ -26,12 +27,22 @@ public class UserResource {
 
 	@Autowired
 	private IParkingService parkingService;
+	
+	@Autowired
+	private IUserService userService;
 
 	@PUT
 	@Path("/{id}/position")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response updatePosition(final UpdatePositionRequest req, @PathParam("id") final Long id) {
-		return Response.ok(req).build();
+		try {
+			userService.updateUserPosition(id, new Coordinate(req.getLat(), req.getLng()));
+			return Response.ok().build();
+		} catch (IllegalArgumentException e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			return Response.serverError().build();
+		}
 	}
 
 	@POST

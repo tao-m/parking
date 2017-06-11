@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import fi.uba.parking.geo.Coordinate;
+
 @Entity
 @Table(name = "USERS")
 public class User {
@@ -175,6 +177,10 @@ public class User {
 		this.device = device;
 	}
 
+	public void updatePosition(Coordinate coordinate) {
+		this.latitude = coordinate.getLatitude();
+		this.longitude = coordinate.getLongitude();
+	}
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(active).append(availableCredit).append(creationDate).append(deleteDate)
