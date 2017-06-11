@@ -1,5 +1,8 @@
 package fi.uba.parking.resource;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -10,13 +13,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fi.uba.parking.geo.Coordinate;
 import fi.uba.parking.request.CheckAvilabilityRequest;
 import fi.uba.parking.request.StartParkingRequest;
-import fi.uba.parking.request.UpdateDeviceRequest;
+import fi.uba.parking.request.UpdateKeyRequest;
 import fi.uba.parking.request.UpdatePositionRequest;
 import fi.uba.parking.service.IParkingService;
 import fi.uba.parking.service.IUserService;
@@ -24,10 +29,12 @@ import fi.uba.parking.service.IUserService;
 @Component
 @Path("/user")
 public class UserResource {
+	
+	private final static Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
 
 	@Autowired
 	private IParkingService parkingService;
-	
+
 	@Autowired
 	private IUserService userService;
 
@@ -41,6 +48,7 @@ public class UserResource {
 		} catch (IllegalArgumentException e) {
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		} catch (Exception e) {
+			LOGGER.error("Unexécted Error: ", e);
 			return Response.serverError().build();
 		}
 	}
@@ -50,21 +58,32 @@ public class UserResource {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response startParking(final StartParkingRequest req, @PathParam("id") final Long id) {
 		try {
-			return Response.ok(parkingService.startParking(id, new Coordinate(req.getLat(), req.getLng()), req.getDomain()))
+			return Response
+					.ok(parkingService.startParking(id, new Coordinate(req.getLat(), req.getLng()), req.getDomain()))
 					.build();
 		} catch (IllegalArgumentException e) {
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		} catch (Exception e) {
+			LOGGER.error("Unexécted Error: ", e);
 			return Response.serverError().build();
 		}
-		
+
 	}
 
 	@DELETE
 	@Path("/{userId}/parking/{parkingId}")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response stopParking(@PathParam("userId") final Long userId, @PathParam("parkingId") final Long parkingId) {
-		return Response.ok().build();
+		try {
+			Map<String, String> resp = new HashMap<String, String>();
+			resp.put("totalCost", parkingService.stopParking(userId, parkingId).toString());
+			return Response.ok(resp).build();
+		} catch (IllegalArgumentException e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			LOGGER.error("Unexécted Error: ", e);
+			return Response.serverError().build();
+		}
 	}
 
 	@POST
@@ -92,7 +111,15 @@ public class UserResource {
 	@PUT
 	@Path("/{id}/device")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response updateDevice(final UpdateDeviceRequest req, @PathParam("id") final Long id) {
-		return Response.ok(req).build();
+	public Response updateDevice(final UpdateKeyRequest req, @PathParam("id") final Long id) {
+		try {
+			userService.updateUserDevice(id, req.getDevice());
+			return Response.ok().build();
+		} catch (IllegalArgumentException e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			LOGGER.error("Unexécted Error: ", e);
+			return Response.serverError().build();
+		}
 	}
 }

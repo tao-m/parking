@@ -10,4 +10,6 @@ public interface IUserService {
 	User getUserById(Long id);
 
 	void updateUserPosition(Long id, Coordinate coordinate);
+	
+	void updateUserDevice(Long id, String key);
 }

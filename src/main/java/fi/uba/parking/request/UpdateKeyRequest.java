@@ -6,18 +6,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "UpdateDeviceKey", propOrder = { "key" })
-@XmlRootElement(name = "UpdateDeviceKey")
-public class UpdateDeviceRequest {
+@XmlType(name = "UpdateKeyRequest", propOrder = { "device" })
+@XmlRootElement(name = "UpdateKeyRequest")
+public class UpdateKeyRequest {
 
-	private String key;
+	private String device;
 
-	public String getKey() {
-		return key;
+	public String getDevice() {
+		return device;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public void setDevice(String device) {
+		this.device = device;
 	}
 	
+	
+
 }

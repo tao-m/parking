@@ -58,6 +58,14 @@ public class Credit {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public void substract(BigInteger amount) {
+		this.amount = this.amount.subtract(amount);
+	}
+	
+	public void add(BigInteger amount) {
+		this.amount = this.amount.add(amount);
+	}
 
 	@Override
 	public int hashCode() {

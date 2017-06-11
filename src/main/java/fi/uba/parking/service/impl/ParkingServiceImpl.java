@@ -3,6 +3,7 @@
  */
 package fi.uba.parking.service.impl;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +26,7 @@ import fi.uba.parking.persistence.IParkingRecordDao;
 import fi.uba.parking.service.IParkingService;
 import fi.uba.parking.service.IStreetSegmentService;
 import fi.uba.parking.service.IUserService;
+import fi.uba.parking.utils.CostCalculator;
 
 /**
  * @author mario
@@ -44,7 +46,7 @@ public class ParkingServiceImpl implements IParkingService {
 
 	@Value("#{appConfig['district']}")
 	private String district;
-	
+
 	@Autowired
 	private IParkingRecordDao parkingDao;
 
@@ -52,34 +54,56 @@ public class ParkingServiceImpl implements IParkingService {
 	@Transactional
 	public Long startParking(Long userId, Coordinate coordinate, String domain) {
 		User user = this.userService.getUserById(userId);
-		if(user == null)
+		if (user == null)
 			throw new IllegalArgumentException("Invalid User");
-		
+
 		GeoClientResult<Address> result = geoClient.reverseGeocode(coordinate);
-		if(result.getStatus() != RequestResult.OK) 
+		if (result.getStatus() != RequestResult.OK)
 			throw new IllegalArgumentException("Invalid Coordinate");
-		
+
 		Address address = result.getResult();
-		if(!StringUtils.equals(district, address.getDistrict()))
+		if (!StringUtils.equals(district, address.getDistrict()))
 			throw new IllegalArgumentException("Address out of reach");
-		
+
 		StreetSegment segment = this.steetService.findByAddress(address.getRoute(), address.getNumber());
-		if(segment == null)
+		if (segment == null)
 			segment = this.buildSegment(address);
-		
+
 		segment.takeSlot();
 		steetService.saveSegment(segment);
-		
-		ParkingRecord record = new ParkingRecord(user, domain, ParkingMode.FREE, ParkingStatus.ON_GOING, 
-								coordinate.getLatitude(), coordinate.getLongitude(), segment, new Date(), null);
-		
+
+		ParkingRecord record = new ParkingRecord(user, domain, ParkingMode.FREE, ParkingStatus.ON_GOING,
+				coordinate.getLatitude(), coordinate.getLongitude(), segment, new Date(), null);
+
 		return parkingDao.save(record);
 	}
 
 	@Override
-	public void stopParking(Long userId, Long parkingId) {
-		// TODO Auto-generated method stub
+	@Transactional
+	public BigInteger stopParking(Long userId, Long parkingId) {
+		User user = this.userService.getUserById(userId);
+		if (user == null)
+			throw new IllegalArgumentException("Invalid User");
 
+		ParkingRecord record = this.parkingDao.getById(parkingId);
+
+		if (record == null || !user.getId().equals(record.getAccount().getId())
+				|| record.getStatus() != ParkingStatus.ON_GOING)
+			throw new IllegalArgumentException("Invalid Parking");
+
+		Date stopDate = new Date();
+
+		record.setEndTime(stopDate);
+		record.setStatus(ParkingStatus.ARCHIVED);
+
+		BigInteger amount = CostCalculator.calculateCost(record.getStartTime(), stopDate);
+
+		user.substractCredit(amount);
+
+		this.userService.saveUser(user);
+		this.parkingDao.save(record);
+		
+		return amount;
 	}
 
 	// This is only to make things faste during testing, remove

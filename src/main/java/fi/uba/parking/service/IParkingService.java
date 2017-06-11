@@ -1,11 +1,13 @@
 package fi.uba.parking.service;
 
+import java.math.BigInteger;
+
 import fi.uba.parking.geo.Coordinate;
 
 public interface IParkingService {
 	
 	Long startParking(Long userId, Coordinate coordinate, String domain);
 	
-	void stopParking(Long userId, Long parkingId);
+	BigInteger stopParking(Long userId, Long parkingId);
 
 }

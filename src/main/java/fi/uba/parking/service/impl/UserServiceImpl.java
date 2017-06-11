@@ -40,4 +40,16 @@ public class UserServiceImpl implements IUserService {
 		user.updatePosition(coordinate);
 		this.userDao.save(user);
 	}
+
+	@Override
+	@Transactional
+	public void updateUserDevice(Long id, String key) {
+		User user = this.getUserById(id);
+		if (user == null)
+			throw new IllegalArgumentException("Invalid User");
+		
+		user.getDevice().setKey(key);
+		
+		this.saveUser(user);		
+	}
 }

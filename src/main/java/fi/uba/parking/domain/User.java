@@ -1,5 +1,6 @@
 package fi.uba.parking.domain;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -22,50 +23,50 @@ import fi.uba.parking.geo.Coordinate;
 public class User {
 
 	@Id
-	@Column(name="id")
+	@Column(name = "id")
 	@GeneratedValue
 	private Long id;
 
-	@Column(name="name")
+	@Column(name = "name")
 	private String name;
-	
-	@Column(name="email")
+
+	@Column(name = "email")
 	private String email;
-	
-	@Column(name="dni")
+
+	@Column(name = "dni")
 	private String dni;
 
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Device.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_device", nullable = false)
 	private Device device;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Credit.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_credit", nullable = false)
 	private Credit availableCredit;
 
-	@Column(name="active")
+	@Column(name = "active")
 	private boolean active;
 
-	@Column(name="creationDate")
+	@Column(name = "creationDate")
 	private Date creationDate;
 
-	@Column(name="deleteDate")
+	@Column(name = "deleteDate")
 	private Date deleteDate;
-	
-	@Column(name="lastUpdate")
+
+	@Column(name = "lastUpdate")
 	private Date lastUpdate;
-	
-	@Column(name="latitude")
+
+	@Column(name = "latitude")
 	private Double latitude;
-	
-	@Column(name="longitude")
+
+	@Column(name = "longitude")
 	private Double longitude;
 
 	public User() {
 	}
 
-	public User(String name, String email, String dni, Device devices, Credit availableCredit,
-			boolean active, Date creationDate, Date deleteDate) {
+	public User(String name, String email, String dni, Device devices, Credit availableCredit, boolean active,
+			Date creationDate, Date deleteDate) {
 		super();
 		this.name = name;
 		this.email = email;
@@ -181,6 +182,15 @@ public class User {
 		this.latitude = coordinate.getLatitude();
 		this.longitude = coordinate.getLongitude();
 	}
+
+	public void substractCredit(BigInteger credit) {
+		this.availableCredit.substract(credit);
+	}
+
+	public void addCredit(BigInteger credit) {
+		this.availableCredit.add(credit);
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(active).append(availableCredit).append(creationDate).append(deleteDate)
