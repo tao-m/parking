@@ -16,8 +16,6 @@ import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 
-import fi.uba.parking.domain.Coordinate;
-
 @Component
 public class GeoClient {
 
@@ -54,7 +52,7 @@ public class GeoClient {
 				AddressComponent[] components = results[0].addressComponents;
 
 				Address address = new Address(coordinate, this.getComponent(components, AddressComponentType.ROUTE),
-						Long.valueOf(this.getComponent(components, AddressComponentType.STREET_NUMBER)),
+						this.getNumber(this.getComponent(components, AddressComponentType.STREET_NUMBER)),
 						this.getComponent(components, AddressComponentType.LOCALITY));
 
 				return new GeoClientResult<Address>(RequestResult.OK, address);
@@ -97,6 +95,13 @@ public class GeoClient {
 			}
 		}
 		return "";
+	}
+	
+	private Long getNumber(String number) {
+		if(number.contains("-")) {
+			return Long.valueOf(number.substring(0, number.indexOf("-")));
+		}
+		return Long.valueOf(number);
 	}
 
 }

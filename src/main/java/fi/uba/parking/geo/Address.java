@@ -1,7 +1,5 @@
 package fi.uba.parking.geo;
 
-import fi.uba.parking.domain.Coordinate;
-
 public class Address {
 
 	private final Coordinate coordinate;

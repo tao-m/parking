@@ -66,7 +66,7 @@ public class Credit {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof Coordinate)) {
+		if (obj == null || !(obj instanceof Credit)) {
 			return false;
 		}
 		Credit other = (Credit) obj;

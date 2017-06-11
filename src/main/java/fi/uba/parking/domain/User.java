@@ -50,6 +50,9 @@ public class User {
 	@Column(name="deleteDate")
 	private Date deleteDate;
 	
+	@Column(name="lastUpdate")
+	private Date lastUpdate;
+	
 	@Column(name="latitude")
 	private Double latitude;
 	
@@ -142,6 +145,14 @@ public class User {
 
 	public void setDeleteDate(Date deleteDate) {
 		this.deleteDate = deleteDate;
+	}
+
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 
 	public Double getLatitude() {

@@ -10,26 +10,27 @@ import javax.persistence.Table;
 @Table(name = "STREET_SEGMENTS")
 public class StreetSegment {
 
+	public static final Long DEFAULT_CAPACITY = 20L;
 	@Id
 	@Column(name = "id")
 	@GeneratedValue
 	private Long id;
-	
+
 	@Column(name = "codeName")
 	private String codeName;
-	
+
 	@Column(name = "displayName")
 	private String displayName;
 
 	@Column(name = "addressFrom")
 	private long addressFrom;
-	
+
 	@Column(name = "addressTo")
 	private long addressTo;
-	
+
 	@Column(name = "vehicleCapacity")
 	private long vehicleCapacity;
-	
+
 	@Column(name = "remainingCapacity")
 	private long remainingCapacity;
 
@@ -103,4 +104,12 @@ public class StreetSegment {
 		this.remainingCapacity = remainingCapacity;
 	}
 
+	public void takeSlot() {
+		this.remainingCapacity = (this.remainingCapacity == 0) ? 0 : this.remainingCapacity - 1L;
+	}
+
+	public void releaseSlot() {
+		this.remainingCapacity = (this.remainingCapacity == this.vehicleCapacity) ? this.vehicleCapacity
+				: this.remainingCapacity + 1L;
+	}
 }

@@ -1,4 +1,4 @@
-package fi.uba.parking.domain;
+package fi.uba.parking.geo;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
