@@ -57,7 +57,7 @@ public class DemoResource {
     @Produces({ MediaType.APPLICATION_JSON })
 	public Response notification(Map<String, String> map) {
 		
-		this.notifier.sendNotification(new Notification("HOLA!", map.get("user")));
+		this.notifier.sendNotification(new Notification(Notification.MOVEMENT_MESSAGE, map.get("user")));
     	
         return Response.ok().build();
     }

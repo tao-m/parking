@@ -34,13 +34,11 @@ public class Notifier {
 
 			JSONObject message = new JSONObject();
 			message.put("to", notification.getUserKey());
-			message.put("priority", "high");
 
 			JSONObject jsonNotification = new JSONObject();
-			jsonNotification.put("title", "Alerta");
-			jsonNotification.put("body", notification);
-
-			message.put("notification", notification);
+			jsonNotification.put("body", notification.getContent());
+			jsonNotification.put("title", "Estacionamiento");
+			message.put("notification", jsonNotification);
 
 			post.setEntity(new StringEntity(message.toString(), "UTF-8"));
 			HttpResponse response = client.execute(post);

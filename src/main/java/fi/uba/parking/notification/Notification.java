@@ -2,7 +2,7 @@ package fi.uba.parking.notification;
 
 public class Notification {
 	
-	public static final String MOVEMENT_MESSAGE = "Viajas a gran velocidad, recueda que tienes una sesion de estacionamiento activa";
+	public static final String MOVEMENT_MESSAGE = "Estacionamiento Activo";
 
 	private final String content;
 	private final String userKey;
