@@ -6,16 +6,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CheckAvilabilityRequest", propOrder = { "lat", "lng", "street", "number", "enableNotifications" })
+@XmlType(name = "CheckAvilabilityRequest", propOrder = { "street", "number", "enableNotifications" })
 @XmlRootElement(name = "CheckAvilabilityRequest")
 public class CheckAvilabilityRequest {
 
-	private Double lat;
-	private Double lng;
-	
 	private String street;
 	
-	private Integer number;
+	private Long number;
 	
 	private boolean enableNotifications;
 
@@ -27,28 +24,12 @@ public class CheckAvilabilityRequest {
 		this.street = street;
 	}
 
-	public Integer getNumber() {
+	public Long getNumber() {
 		return number;
 	}
 
-	public void setNumber(Integer number) {
+	public void setNumber(Long number) {
 		this.number = number;
-	}
-
-	public void setLat(Double lat) {
-		this.lat = lat;
-	}
-
-	public void setLng(Double lng) {
-		this.lng = lng;
-	}
-
-	public Double getLat() {
-		return lat;
-	}
-
-	public Double getLng() {
-		return lng;
 	}
 
 	public boolean isEnableNotifications() {

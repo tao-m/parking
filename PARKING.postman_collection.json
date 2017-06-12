@@ -98,7 +98,47 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"device\":\"AKAKAKAKAKKAKAKAKAKAKKAKAKAKAKAKA\"\n}"
+					"raw": "{\n\t\"device\":\"fDVvctRA-oE:APA91bFythPBq-9PVLGFcGQIPjtjIAq2Slajo_M3gifb2DayTypf6nRAJbe8kd8Nce6BpJihFFXjv0vF02ossnXtftAIhCt8yTpr0dlo_pN8LXs-1jp9IFRTUskND_RDmpXEsAeY9ilk\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "TEST NOTIFICATION",
+			"request": {
+				"url": "http://localhost:8080/parking/init/notification",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"user\":\"fDVvctRA-oE:APA91bFythPBq-9PVLGFcGQIPjtjIAq2Slajo_M3gifb2DayTypf6nRAJbe8kd8Nce6BpJihFFXjv0vF02ossnXtftAIhCt8yTpr0dlo_pN8LXs-1jp9IFRTUskND_RDmpXEsAeY9ilk\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "CHECK AVAILABILITY",
+			"request": {
+				"url": "http://localhost:8080/parking/user/1/parking/availability",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"street\":\"Coronel Charlone\",\n\t\"number\":950\n}"
 				},
 				"description": ""
 			},

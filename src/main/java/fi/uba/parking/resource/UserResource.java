@@ -18,12 +18,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import fi.uba.parking.domain.Availability;
 import fi.uba.parking.geo.Coordinate;
 import fi.uba.parking.request.CheckAvilabilityRequest;
 import fi.uba.parking.request.StartParkingRequest;
 import fi.uba.parking.request.UpdateKeyRequest;
 import fi.uba.parking.request.UpdatePositionRequest;
 import fi.uba.parking.service.IParkingService;
+import fi.uba.parking.service.IStreetSegmentService;
 import fi.uba.parking.service.IUserService;
 
 @Component
@@ -37,6 +39,9 @@ public class UserResource {
 
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private IStreetSegmentService segmentService;
 
 	@PUT
 	@Path("/{id}/position")
@@ -90,7 +95,16 @@ public class UserResource {
 	@Path("/{id}/parking/availability")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response checkParkingAvailability(final CheckAvilabilityRequest req, @PathParam("id") final Long id) {
-		return Response.ok(req).build();
+		try {
+			Map<String, Availability> resp = new HashMap<String, Availability>();
+			resp.put("avaliability", segmentService.checkAvailability(id, req.getStreet(), req.getNumber(), false));
+			return Response.ok(resp).build();
+		} catch (IllegalArgumentException e) {
+			return this.buildErrorResponse(Status.BAD_REQUEST, e.getMessage());
+		} catch (Exception e) {
+			LOGGER.error("Unexpected Error: ", e);
+			return this.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 
 	@DELETE

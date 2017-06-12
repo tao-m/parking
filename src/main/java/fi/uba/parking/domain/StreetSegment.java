@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Table(name = "STREET_SEGMENTS")
 public class StreetSegment {
 
-	public static final Long DEFAULT_CAPACITY = 20L;
+	public static final Long DEFAULT_CAPACITY = 4L;
 	@Id
 	@Column(name = "id")
 	@GeneratedValue

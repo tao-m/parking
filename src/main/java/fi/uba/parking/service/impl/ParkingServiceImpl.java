@@ -102,8 +102,10 @@ public class ParkingServiceImpl implements IParkingService {
 		BigInteger amount = CostCalculator.calculateCost(record.getStartTime(), stopDate);
 
 		user.substractCredit(amount);
-
+		
+		record.getStreetSegment().releaseSlot();
 		this.userService.saveUser(user);
+		this.steetService.saveSegment(record.getStreetSegment());
 		this.parkingDao.save(record);
 		
 		return amount;
