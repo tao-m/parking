@@ -50,7 +50,7 @@
 		{
 			"name": "STOP PARKING",
 			"request": {
-				"url": "http://localhost:8080/parking/user/1/parking/1",
+				"url": "http://localhost:8080/parking/user/1/parking",
 				"method": "DELETE",
 				"header": [
 					{

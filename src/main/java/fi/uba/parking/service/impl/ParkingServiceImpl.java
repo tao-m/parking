@@ -83,16 +83,15 @@ public class ParkingServiceImpl implements IParkingService {
 
 	@Override
 	@Transactional
-	public BigInteger stopParking(Long userId, Long parkingId) {
+	public BigInteger stopParking(Long userId) {
 		User user = this.userService.getUserById(userId);
 		if (user == null)
 			throw new IllegalArgumentException("Invalid User");
 
-		ParkingRecord record = this.parkingDao.getById(parkingId);
+		ParkingRecord record = this.parkingDao.findActiveRecordByUser(user);
 
-		if (record == null || !user.getId().equals(record.getAccount().getId())
-				|| record.getStatus() != ParkingStatus.ON_GOING)
-			throw new IllegalArgumentException("Invalid Parking");
+		if (record == null)
+			return BigInteger.ZERO;
 
 		Date stopDate = new Date();
 

@@ -10,7 +10,7 @@ public interface IParkingService {
 	
 	Long startParking(Long userId, Coordinate coordinate, String domain);
 	
-	BigInteger stopParking(Long userId, Long parkingId);
+	BigInteger stopParking(Long userId);
 
 	ParkingRecord findActiveRecordByUser(User user);
 

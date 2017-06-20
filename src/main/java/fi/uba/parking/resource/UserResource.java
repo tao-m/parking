@@ -1,5 +1,6 @@
 package fi.uba.parking.resource;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,13 +77,19 @@ public class UserResource {
 	}
 
 	@DELETE
-	@Path("/{userId}/parking/{parkingId}")
+	@Path("/{userId}/parking")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response stopParking(@PathParam("userId") final Long userId, @PathParam("parkingId") final Long parkingId) {
+	public Response stopParking(@PathParam("userId") final Long userId) {
 		try {
-			Map<String, String> resp = new HashMap<String, String>();
-			resp.put("totalCost", parkingService.stopParking(userId, parkingId).toString());
-			return Response.ok(resp).build();
+			BigInteger cost = parkingService.stopParking(userId);
+			if(cost.compareTo(BigInteger.ZERO) != 0) {
+				Map<String, String> resp = new HashMap<String, String>();
+				resp.put("totalCost", cost.toString());
+				return Response.ok(resp).build();
+			} else {
+				return Response.ok().status(Status.ACCEPTED).build();
+			}
+			
 		} catch (IllegalArgumentException e) {
 			return this.buildErrorResponse(Status.BAD_REQUEST, e.getMessage());
 		} catch (Exception e) {
