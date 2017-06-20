@@ -143,6 +143,86 @@
 				"description": ""
 			},
 			"response": []
+		},
+		{
+			"name": "CREATE STORE",
+			"request": {
+				"url": "http://localhost:8080/parking/store",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"lat\":-34.5415402,\n\t\"lng\":-58.707371,\n\t\"name\": \"Lo de Pocha\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "SEARCH STORE",
+			"request": {
+				"url": "http://localhost:8080/parking/store/search",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"lat\":-34.535850,\n\t\"lng\":-58.713077\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE STORE",
+			"request": {
+				"url": "http://localhost:8080/parking/store/1",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "STORE ALL",
+			"request": {
+				"url": "http://localhost:8080/parking/store",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"lat\":-34.535850,\n\t\"lng\":-58.713077\n}"
+				},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }

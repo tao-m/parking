@@ -17,28 +17,28 @@ public class ReloadStation {
 	@Column(name = "id")
 	@GeneratedValue
 	private Long id;
-	
+
 	@Column(name = "latitude")
 	private Double latitude;
-	
+
 	@Column(name = "longitude")
 	private Double longitude;
-	
-	@Column(name = "cuit")
-	private String cuit;
-	
+
 	@Column(name = "display_info")
 	private String displayInfo;
+
+	@Column(name = "address")
+	private String address;
 
 	public ReloadStation() {
 	}
 
-	public ReloadStation(Double latitude, Double longitude, String cuit, String displayInfo) {
+	public ReloadStation(Double latitude, Double longitude, String displayInfo, String address) {
 		super();
 		this.longitude = longitude;
 		this.latitude = latitude;
-		this.cuit = cuit;
 		this.displayInfo = displayInfo;
+		this.address = address;
 	}
 
 	public Long getId() {
@@ -65,14 +65,6 @@ public class ReloadStation {
 		this.longitude = longitude;
 	}
 
-	public String getCuit() {
-		return cuit;
-	}
-
-	public void setCuit(String cuit) {
-		this.cuit = cuit;
-	}
-
 	public String getDisplayInfo() {
 		return displayInfo;
 	}
@@ -81,9 +73,17 @@ public class ReloadStation {
 		this.displayInfo = displayInfo;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(latitude).append(longitude).append(cuit).append(id).hashCode();
+		return new HashCodeBuilder().append(latitude).append(longitude).append(id).hashCode();
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class ReloadStation {
 		ReloadStation other = (ReloadStation) obj;
 
 		return new EqualsBuilder().append(latitude, other.latitude).append(longitude, other.longitude)
-				.append(cuit, other.cuit).append(id, other.id).isEquals();
+				.append(id, other.id).isEquals();
 	}
 
 }
