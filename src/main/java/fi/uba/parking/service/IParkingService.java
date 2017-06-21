@@ -15,4 +15,6 @@ public interface IParkingService {
 	ParkingRecord findActiveRecordByUser(User user);
 
 	boolean checkForActivePaking(User user);
+
+	ParkingRecord findActiveRecordByUser(Long userId);
 }

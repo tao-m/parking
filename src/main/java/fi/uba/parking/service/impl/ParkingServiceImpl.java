@@ -126,6 +126,17 @@ public class ParkingServiceImpl implements IParkingService {
 		return this.parkingDao.findActiveRecordByUser(user);
 	}
 	
+	
+	@Override
+	@Transactional
+	public ParkingRecord findActiveRecordByUser(Long userId) {
+		User user = this.userService.getUserById(userId);
+		if (user == null)
+			throw new IllegalArgumentException("Invalid User");
+		
+		return this.parkingDao.findActiveRecordByUser(user);
+	}
+	
 	@Override
 	@Transactional
 	public boolean checkForActivePaking(User user) {

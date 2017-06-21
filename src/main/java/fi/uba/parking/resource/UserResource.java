@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fi.uba.parking.domain.Availability;
+import fi.uba.parking.domain.ParkingRecord;
 import fi.uba.parking.geo.Coordinate;
 import fi.uba.parking.request.CheckAvilabilityRequest;
 import fi.uba.parking.request.StartParkingRequest;
@@ -32,7 +34,7 @@ import fi.uba.parking.service.IUserService;
 @Component
 @Path("/user")
 public class UserResource {
-	
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
 
 	@Autowired
@@ -40,7 +42,7 @@ public class UserResource {
 
 	@Autowired
 	private IUserService userService;
-	
+
 	@Autowired
 	private IStreetSegmentService segmentService;
 
@@ -82,14 +84,14 @@ public class UserResource {
 	public Response stopParking(@PathParam("userId") final Long userId) {
 		try {
 			BigInteger cost = parkingService.stopParking(userId);
-			if(cost.compareTo(BigInteger.ZERO) != 0) {
+			if (cost.compareTo(BigInteger.ZERO) != 0) {
 				Map<String, String> resp = new HashMap<String, String>();
 				resp.put("totalCost", cost.toString());
 				return Response.ok(resp).build();
 			} else {
 				return Response.ok().status(Status.ACCEPTED).build();
 			}
-			
+
 		} catch (IllegalArgumentException e) {
 			return this.buildErrorResponse(Status.BAD_REQUEST, e.getMessage());
 		} catch (Exception e) {
@@ -143,10 +145,32 @@ public class UserResource {
 			return this.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-	
+
 	private Response buildErrorResponse(Status status, String message) {
 		Map<String, String> resp = new HashMap<>();
 		resp.put("message", message);
 		return Response.status(status).entity(resp).build();
+	}
+
+	@GET
+	@Path("/{userId}/parking")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getActiveParking(@PathParam("userId") final Long userId) {
+		try {
+			Map<String, String> resp = new HashMap<String, String>();
+			ParkingRecord record = parkingService.findActiveRecordByUser(userId);
+			if (record != null) {
+				resp.put("running", Boolean.TRUE.toString());
+				resp.put("domain", record.getVehicleDomain());
+			} else {
+				resp.put("running", Boolean.FALSE.toString());
+			}
+			return Response.ok(resp).build();
+		} catch (IllegalArgumentException e) {
+			return this.buildErrorResponse(Status.BAD_REQUEST, e.getMessage());
+		} catch (Exception e) {
+			LOGGER.error("Unexpected Error: ", e);
+			return this.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 }
