@@ -104,7 +104,7 @@ public class UserResource {
 	public Response checkParkingAvailability(final CheckAvilabilityRequest req, @PathParam("id") final Long id) {
 		try {
 			Map<String, Availability> resp = new HashMap<String, Availability>();
-			resp.put("avaliability", segmentService.checkAvailability(id, req.getStreet(), req.getNumber(), false));
+			resp.put("availability", segmentService.checkAvailability(id, req.getStreet(), req.getNumber(), false));
 			return Response.ok(resp).build();
 		} catch (IllegalArgumentException e) {
 			return this.buildErrorResponse(Status.BAD_REQUEST, e.getMessage());
