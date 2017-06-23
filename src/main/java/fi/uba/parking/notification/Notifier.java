@@ -38,6 +38,7 @@ public class Notifier {
 			JSONObject jsonNotification = new JSONObject();
 			jsonNotification.put("body", notification.getContent());
 			jsonNotification.put("title", "Estacionamiento");
+			jsonNotification.put("click_action", "OPEN_PARKING_ACTIVITY");
 			message.put("notification", jsonNotification);
 
 			post.setEntity(new StringEntity(message.toString(), "UTF-8"));
