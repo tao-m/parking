@@ -1,10 +1,14 @@
 package fi.uba.parking.geo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.maps.DistanceMatrixApi;
+import com.google.maps.DistanceMatrixApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.AddressComponent;
@@ -82,6 +86,28 @@ public class GeoClient {
 		}
 	}
 
+	public List<Long> distance(Coordinate origin, List<Coordinate> destinations) {
+		try {
+			LatLng[] coords = new LatLng[destinations.size()];
+			for (int i = 0; i < destinations.size(); i++) {
+				Coordinate c = destinations.get(i);
+				coords[i] = new LatLng(c.getLatitude(), c.getLongitude());
+			}
+
+			DistanceMatrixApiRequest req = DistanceMatrixApi.newRequest(context)
+					.origins(new LatLng(origin.getLatitude(), origin.getLongitude())).destinations(coords);
+
+			DistanceMatrixElement[] result = req.mode(TravelMode.WALKING).await().rows[0].elements;
+			List<Long> ret = new ArrayList<Long>();
+			for (DistanceMatrixElement e : result) {
+				ret.add(e.distance.inMeters);
+			}
+			return ret;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	private String buildGeocodeRequest(String route, Long number) {
 		StringBuffer sb = new StringBuffer(number.toString());
 		sb.append(" ").append(route).append(",").append(this.district);
@@ -96,9 +122,9 @@ public class GeoClient {
 		}
 		return "";
 	}
-	
+
 	private Long getNumber(String number) {
-		if(number.contains("-")) {
+		if (number.contains("-")) {
 			return Long.valueOf(number.substring(0, number.indexOf("-")));
 		}
 		return Long.valueOf(number);

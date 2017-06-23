@@ -1,7 +1,11 @@
 package fi.uba.parking.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +18,7 @@ import fi.uba.parking.geo.GeoClient;
 import fi.uba.parking.geo.GeoClientResult;
 import fi.uba.parking.geo.RequestResult;
 import fi.uba.parking.persistence.IReloadStationDao;
+import fi.uba.parking.response.ReloadLocationDto;
 import fi.uba.parking.service.IStoreService;
 
 @Service
@@ -44,10 +49,28 @@ public class StoreServiceImpl implements IStoreService {
 
 	@Override
 	@Transactional
-	public List<ReloadStation> search(Coordinate center, Long searchRadio) {
+	public List<ReloadLocationDto> search(Coordinate center, Long searchRadio) {
+		List<ReloadLocationDto> ret = new ArrayList<>();
 		Long radio = (searchRadio != null && searchRadio > MIN_SEARCH_RADIO) ? searchRadio : MIN_SEARCH_RADIO;
 		Area searchArea = new Area(center, radio);
-		return this.stationDao.searchByArea(searchArea);
+		List<ReloadStation> stations = this.stationDao.searchByArea(searchArea);
+		if(CollectionUtils.isNotEmpty(stations)) {
+			List<Coordinate> coords = new ArrayList<>();
+			for(ReloadStation rs : stations)
+				coords.add(new Coordinate(rs.getLatitude(), rs.getLongitude()));
+			
+			List<Long> distances = this.geoClient.distance(center, coords);
+			
+			for(int i = 0; i < stations.size(); i++)
+				ret.add(new ReloadLocationDto(stations.get(i), distances.get(i)));
+			Collections.sort(ret, new Comparator<ReloadLocationDto>() {
+                @Override
+                public int compare(ReloadLocationDto dto1, ReloadLocationDto dto2) {
+                    return Long.compare(dto1.getDistance(), dto2.getDistance());
+                }
+            });
+		}
+		return ret;
 	}
 
 	@Override
