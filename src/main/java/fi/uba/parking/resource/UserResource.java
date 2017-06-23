@@ -1,6 +1,7 @@
 package fi.uba.parking.resource;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -162,6 +163,8 @@ public class UserResource {
 			if (record != null) {
 				resp.put("running", Boolean.TRUE.toString());
 				resp.put("domain", record.getVehicleDomain());
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+				resp.put("date", dateFormat.format(record.getStartTime()));
 			} else {
 				resp.put("running", Boolean.FALSE.toString());
 			}
