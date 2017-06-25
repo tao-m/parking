@@ -4,6 +4,7 @@ import fi.uba.parking.domain.ReloadStation;
 
 public class ReloadLocationDto {
 
+	private final Long id;
 	private final Double latitude;
 	private final Double longitude;
 
@@ -13,11 +14,16 @@ public class ReloadLocationDto {
 	private final Long distance;
 	
 	public ReloadLocationDto(ReloadStation station, Long distance) {
+		this.id = station.getId();
 		this.latitude = station.getLatitude();
 		this.longitude = station.getLongitude();
 		this.displayInfo = station.getDisplayInfo();
 		this.address = station.getAddress();
 		this.distance = distance;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public Double getLatitude() {
